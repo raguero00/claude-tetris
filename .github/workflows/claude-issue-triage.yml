@@ -1,0 +1,108 @@
+name: Claude Issue Triage
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Analyze issue and assign labels
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: >-
+            --allowed-tools
+            Bash(gh issue view:*),Bash(gh issue edit:*),Bash(gh issue comment:*),Bash(gh label list:*),Bash(gh label create:*),Read,Grep,Glob
+          prompt: |
+            Eres un asistente de triaje de issues para este repositorio de Tetris en JavaScript vanilla.
+            Tu tarea es analizar el issue #${{ github.event.issue.number }} del repositorio ${{ github.repository }} y ejecutar las siguientes acciones:
+
+            ## Paso 1 — Leer el issue
+
+            Ejecuta:
+            ```
+            gh issue view ${{ github.event.issue.number }}
+            ```
+            Toma nota del título, cuerpo y contexto del issue.
+
+            ## Paso 2 — Gestionar labels
+
+            El set de labels base esperado para este repositorio es:
+            - bug
+            - enhancement
+            - question
+            - documentation
+            - gameplay
+            - ui/ux
+            - performance
+            - priority: high
+            - priority: medium
+            - priority: low
+
+            Ejecuta `gh label list` para ver los labels existentes.
+            Para cada label del set base que NO exista y sea relevante para este issue, créalo con:
+            ```
+            gh label create "NOMBRE" --color "COLOR_HEX" --description "DESCRIPCIÓN"
+            ```
+            Usa colores apropiados (por ejemplo: bug → #d73a4a, enhancement → #a2eeef, question → #d876e3, documentation → #0075ca, gameplay → #e4e669, ui/ux → #f9d0c4, performance → #bfd4f2, priority: high → #b60205, priority: medium → #e4a505, priority: low → #0e8a16).
+
+            Luego asigna al issue los 1–4 labels más relevantes con:
+            ```
+            gh issue edit ${{ github.event.issue.number }} --add-label "LABEL1,LABEL2"
+            ```
+
+            ## Paso 3 — Inspeccionar el código relevante
+
+            Revisa los archivos del proyecto (`game.js`, `index.html`, `style.css`) para fundamentar tu análisis. Usa Read, Grep y Glob según necesites.
+
+            ## Paso 4 — Publicar diagnóstico
+
+            Publica UN comentario en español con el siguiente formato exacto, adaptado al contenido del issue:
+
+            ```
+            ## 🔍 Diagnóstico automático
+
+            **Resumen del problema:** [descripción concisa de qué está fallando o qué se solicita]
+
+            **Causa probable:** [explicación técnica de por qué ocurre]
+
+            **Severidad:** Alta / Media / Baja
+
+            ---
+
+            ## 📁 Archivos probablemente afectados
+
+            - `game.js` — [qué parte o función es relevante, si aplica]
+            - `index.html` — [qué parte es relevante, si aplica]
+            - `style.css` — [qué parte es relevante, si aplica]
+
+            *(Omite los archivos que no apliquen al issue)*
+
+            ---
+
+            ## 🛠️ Enfoque sugerido
+
+            1. [Primer paso concreto para implementar la solución]
+            2. [Segundo paso]
+            3. [Pasos adicionales según corresponda]
+
+            ---
+
+            > 🤖 Análisis generado automáticamente por Claude. Puede contener imprecisiones.
+            ```
+
+            Si el issue es ambiguo o falta información, indícalo claramente en el comentario y solicita aclaración al autor.
+
+            Ejecuta las acciones en orden: leer → labels → inspeccionar código → comentar.
