@@ -23,8 +23,7 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: >-
-            --allowed-tools
-            Bash(gh issue view:*),Bash(gh issue edit:*),Bash(gh issue comment:*),Bash(gh label list:*),Bash(gh label create:*),Read,Grep,Glob
+            --allowed-tools "Bash(gh issue view:*),Bash(gh issue edit:*),Bash(gh issue comment:*),Bash(gh label list:*),Bash(gh label create:*),Read,Grep,Glob"
           prompt: |
             Eres un asistente de triaje de issues para este repositorio de Tetris en JavaScript vanilla.
             Tu tarea es analizar el issue #${{ github.event.issue.number }} del repositorio ${{ github.repository }} y ejecutar las siguientes acciones:
