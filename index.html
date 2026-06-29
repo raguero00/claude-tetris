@@ -58,6 +58,45 @@
         <p id="overlay-title">GAME OVER</p>
         <p id="overlay-score"></p>
         <button id="restart-btn">Reiniciar</button>
+
+        <div id="pause-menu" class="hidden">
+          <div class="pause-actions">
+            <button id="resume-btn">Reanudar</button>
+            <button id="pause-restart-btn">Reiniciar</button>
+          </div>
+
+          <div class="pause-controls">
+            <span class="pause-section-label">CONTROLES</span>
+            <ul>
+              <li><kbd>←</kbd><kbd>→</kbd> mover</li>
+              <li><kbd>↑</kbd> rotar</li>
+              <li><kbd>↓</kbd> bajar</li>
+              <li><kbd>Space</kbd> caída</li>
+              <li><kbd>P</kbd> / <kbd>Esc</kbd> pausa</li>
+            </ul>
+          </div>
+
+          <div class="pause-level-select">
+            <label for="start-level-input" class="pause-section-label">NIVEL INICIAL</label>
+            <select id="start-level-input">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
   </div>
