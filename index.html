@@ -53,10 +53,30 @@
       </aside>
     </div>
 
+    <!-- High-scores section shown on start screen -->
+    <section id="hs-start-section" class="hs-start hidden">
+      <h2 class="hs-title">RECORDS</h2>
+      <div class="hs-content"></div>
+      <button id="clear-hs-btn" class="clear-hs-btn">Borrar records</button>
+    </section>
+
     <div id="overlay" class="overlay hidden">
       <div class="overlay-box">
         <p id="overlay-title">GAME OVER</p>
         <p id="overlay-score"></p>
+
+        <!-- Name entry — shown only when score qualifies -->
+        <div id="name-entry-section" class="hidden">
+          <p class="name-entry-label">¡Nuevo record! Ingresa tu nombre:</p>
+          <div class="name-entry-row">
+            <input type="text" id="player-name" maxlength="16" placeholder="Tu nombre" autocomplete="off" />
+            <button id="save-score-btn">Guardar</button>
+          </div>
+        </div>
+
+        <!-- High-scores table inside overlay -->
+        <div id="hs-overlay-section" class="hidden hs-overlay-content"></div>
+
         <button id="restart-btn">Reiniciar</button>
       </div>
     </div>
