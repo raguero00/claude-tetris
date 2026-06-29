@@ -15,6 +15,137 @@ const COLORS = [
   '#ffb74d', // L - orange
 ];
 
+// ---- Skins ----------------------------------------------------------------
+
+const SKINS = {
+  retro: {
+    colors: COLORS,
+    drawBlock(context, x, y, colorIndex, size, alpha) {
+      if (!colorIndex) return;
+      const color = this.colors[colorIndex];
+      context.globalAlpha = alpha ?? 1;
+      context.fillStyle = color;
+      context.fillRect(x * size + 1, y * size + 1, size - 2, size - 2);
+      // highlight strip
+      context.fillStyle = 'rgba(255,255,255,0.12)';
+      context.fillRect(x * size + 1, y * size + 1, size - 2, 4);
+      context.globalAlpha = 1;
+    },
+  },
+
+  neon: {
+    colors: [
+      null,
+      '#00fff5', // I - electric cyan
+      '#ffee00', // O - electric yellow
+      '#df00ff', // T - electric magenta
+      '#00ff6e', // S - electric green
+      '#ff2244', // Z - electric red
+      '#3d9eff', // J - electric blue
+      '#ff8c00', // L - electric orange
+    ],
+    drawBlock(context, x, y, colorIndex, size, alpha) {
+      if (!colorIndex) return;
+      const color = this.colors[colorIndex];
+      context.globalAlpha = alpha ?? 1;
+      context.shadowBlur = 14;
+      context.shadowColor = color;
+      context.fillStyle = color;
+      context.fillRect(x * size + 1, y * size + 1, size - 2, size - 2);
+      context.shadowBlur = 0;
+      // inner bright core (drawn after shadow reset so it stays white)
+      context.fillStyle = 'rgba(255,255,255,0.18)';
+      context.fillRect(x * size + 2, y * size + 2, size - 4, size - 4);
+      context.globalAlpha = 1;
+    },
+  },
+
+  pastel: {
+    colors: [
+      null,
+      '#a8e6f0', // I - soft cyan
+      '#fff4a8', // O - soft yellow
+      '#e0b8f0', // T - soft lavender
+      '#b8f0c0', // S - soft green
+      '#f0b8b8', // Z - soft red
+      '#b8d4f0', // J - soft blue
+      '#f0d4b8', // L - soft peach
+    ],
+    drawBlock(context, x, y, colorIndex, size, alpha) {
+      if (!colorIndex) return;
+      const color = this.colors[colorIndex];
+      context.globalAlpha = alpha ?? 1;
+      const px = x * size + 2;
+      const py = y * size + 2;
+      const w = size - 4;
+      const h = size - 4;
+      const r = Math.min(5, w / 2, h / 2);
+      context.fillStyle = color;
+      context.beginPath();
+      context.moveTo(px + r, py);
+      context.lineTo(px + w - r, py);
+      context.arcTo(px + w, py, px + w, py + r, r);
+      context.lineTo(px + w, py + h - r);
+      context.arcTo(px + w, py + h, px + w - r, py + h, r);
+      context.lineTo(px + r, py + h);
+      context.arcTo(px, py + h, px, py + h - r, r);
+      context.lineTo(px, py + r);
+      context.arcTo(px, py, px + r, py, r);
+      context.closePath();
+      context.fill();
+      // soft highlight (strip across the top, height = r, respects rounded corners)
+      context.fillStyle = 'rgba(255,255,255,0.35)';
+      context.beginPath();
+      context.moveTo(px + r, py);
+      context.lineTo(px + w - r, py);
+      context.arcTo(px + w, py, px + w, py + r, r);
+      context.lineTo(px + w, py + r);
+      context.lineTo(px, py + r);
+      context.arcTo(px, py, px + r, py, r);
+      context.closePath();
+      context.fill();
+      context.globalAlpha = 1;
+    },
+  },
+
+  pixel: {
+    colors: COLORS,
+    drawBlock(context, x, y, colorIndex, size, alpha) {
+      if (!colorIndex) return;
+      const color = this.colors[colorIndex];
+      context.globalAlpha = alpha ?? 1;
+      context.fillStyle = color;
+      context.fillRect(x * size + 1, y * size + 1, size - 2, size - 2);
+      // highlight strip
+      context.fillStyle = 'rgba(255,255,255,0.12)';
+      context.fillRect(x * size + 1, y * size + 1, size - 2, 4);
+      // pixel crosshatch dots
+      context.fillStyle = 'rgba(0,0,0,0.18)';
+      const bx = x * size + 1;
+      const by = y * size + 1;
+      for (let dy = 4; dy < size - 2; dy += 4) {
+        for (let dx = (dy / 4 % 2 === 0 ? 2 : 4); dx < size - 2; dx += 4) {
+          context.fillRect(bx + dx, by + dy, 1, 1);
+        }
+      }
+      context.globalAlpha = 1;
+    },
+  },
+};
+
+let activeSkin = SKINS.retro;
+
+function applySkin(name) {
+  activeSkin = SKINS[name] || SKINS.retro;
+  document.body.classList.remove('skin-neon', 'skin-pastel', 'skin-pixel');
+  if (name === 'neon' || name === 'pastel' || name === 'pixel') {
+    document.body.classList.add('skin-' + name);
+  }
+  localStorage.setItem('tetris-skin', name);
+}
+
+// ---------------------------------------------------------------------------
+
 const PIECES = [
   null,
   [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]], // I
@@ -40,6 +171,7 @@ const overlayTitle = document.getElementById('overlay-title');
 const overlayScore = document.getElementById('overlay-score');
 const restartBtn = document.getElementById('restart-btn');
 const themeToggle = document.getElementById('theme-toggle');
+const skinSelect = document.getElementById('skin-select');
 
 function applyTheme(isLight) {
   document.body.classList.toggle('light', isLight);
@@ -53,6 +185,16 @@ if (savedTheme === 'light') {
   themeToggle.checked = true;
   applyTheme(true);
 }
+
+skinSelect.addEventListener('change', () => {
+  applySkin(skinSelect.value);
+  draw();
+  drawNext();
+});
+
+const savedSkin = localStorage.getItem('tetris-skin') || 'retro';
+skinSelect.value = savedSkin;
+applySkin(savedSkin);
 
 let board, current, next, score, lines, level, paused, gameOver, lastTime, dropAccum, dropInterval, animId;
 
@@ -171,15 +313,7 @@ function updateHUD() {
 }
 
 function drawBlock(context, x, y, colorIndex, size, alpha) {
-  if (!colorIndex) return;
-  const color = COLORS[colorIndex];
-  context.globalAlpha = alpha ?? 1;
-  context.fillStyle = color;
-  context.fillRect(x * size + 1, y * size + 1, size - 2, size - 2);
-  // highlight
-  context.fillStyle = 'rgba(255,255,255,0.12)';
-  context.fillRect(x * size + 1, y * size + 1, size - 2, 4);
-  context.globalAlpha = 1;
+  activeSkin.drawBlock(context, x, y, colorIndex, size, alpha);
 }
 
 function drawGrid() {

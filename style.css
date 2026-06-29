@@ -48,6 +48,27 @@ body.light {
   --switch-track: #b0b0c8;
 }
 
+/* ---- Skin overrides ---- */
+body.skin-neon {
+  --bg-board: #000008;
+  --border-board: #00fff566;
+  --grid-line: #0a0a1a;
+  --color-accent: #00fff5;
+  --color-title-shadow: rgba(0, 255, 245, 0.5);
+}
+
+body.skin-pastel {
+  --bg-board: #f5f0ff;
+  --border-board: #d8c8f0;
+  --grid-line: #ece4f8;
+}
+
+body.skin-pixel {
+  --bg-board: #1a1a25;
+  --border-board: #2a2a3a;
+  --grid-line: #1e1e2a;
+}
+
 body {
   background: var(--bg-body);
   color: var(--color-text);
@@ -210,6 +231,24 @@ kbd {
 
 #restart-btn:hover {
   background: var(--bg-restart-btn-hover);
+}
+
+/* ---- Skin selector ---- */
+.skin-select {
+  background: var(--bg-kbd);
+  border: 1px solid var(--border-kbd);
+  border-radius: 4px;
+  color: var(--color-text);
+  font-size: 12px;
+  padding: 4px 6px;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
+}
+
+.skin-select:focus {
+  outline: none;
+  border-color: var(--color-accent);
 }
 
 /* ---- Theme toggle switch ---- */
