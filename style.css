@@ -261,3 +261,140 @@ kbd {
   font-size: 14px;
   line-height: 1;
 }
+
+/* ---- High-scores (start screen) ---- */
+.hs-start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.hs-start.hidden {
+  display: none;
+}
+
+.hs-title {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: var(--color-label);
+  font-weight: 700;
+}
+
+.hs-table {
+  border-collapse: collapse;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  color: var(--color-text);
+  min-width: 320px;
+}
+
+.hs-table th {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--color-label);
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-bottom: 1px solid var(--border-board);
+  text-align: left;
+}
+
+.hs-table td {
+  padding: 4px 10px;
+  border-bottom: 1px solid var(--border-board);
+}
+
+.hs-table tr.hs-current td {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.hs-empty {
+  font-size: 12px;
+  color: var(--color-label);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.clear-hs-btn {
+  background: transparent;
+  color: var(--color-label);
+  border: 1px solid var(--border-board);
+  border-radius: 4px;
+  padding: 4px 14px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.clear-hs-btn:hover {
+  color: var(--color-overlay-title);
+  border-color: var(--color-overlay-title);
+}
+
+/* ---- High-scores inside overlay ---- */
+.hs-overlay-content {
+  width: 100%;
+}
+
+.hs-overlay-content.hidden {
+  display: none;
+}
+
+.hs-overlay-content .hs-table {
+  min-width: 260px;
+}
+
+/* ---- Name-entry form ---- */
+#name-entry-section.hidden {
+  display: none;
+}
+
+.name-entry-label {
+  font-size: 12px;
+  color: var(--color-overlay-score);
+  margin-bottom: 4px;
+}
+
+.name-entry-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+#player-name {
+  background: var(--bg-board);
+  color: var(--color-text);
+  border: 1px solid var(--border-board);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 14px;
+  font-family: 'Courier New', Courier, monospace;
+  width: 140px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+#player-name:focus {
+  border-color: var(--color-accent);
+}
+
+#save-score-btn {
+  background: var(--bg-restart-btn);
+  color: var(--color-restart-btn);
+  border: none;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.15s;
+}
+
+#save-score-btn:hover {
+  background: var(--bg-restart-btn-hover);
+}
