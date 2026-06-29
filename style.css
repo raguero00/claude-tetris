@@ -188,6 +188,10 @@ kbd {
   color: var(--color-overlay-title);
 }
 
+.overlay.is-paused #overlay-title {
+  color: var(--color-accent);
+}
+
 #overlay-score {
   font-family: 'Courier New', Courier, monospace;
   font-size: 14px;
@@ -210,6 +214,88 @@ kbd {
 
 #restart-btn:hover {
   background: var(--bg-restart-btn-hover);
+}
+
+/* ---- Pause menu ---- */
+#pause-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+}
+
+#pause-menu.hidden {
+  display: none;
+}
+
+.pause-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.pause-actions button {
+  background: var(--bg-restart-btn);
+  color: var(--color-restart-btn);
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.pause-actions button:hover {
+  background: var(--bg-restart-btn-hover);
+}
+
+.pause-controls {
+  text-align: left;
+}
+
+.pause-controls ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.pause-controls li {
+  font-size: 12px;
+  color: var(--color-control-text);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pause-section-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--color-label);
+  font-weight: 600;
+  display: block;
+}
+
+.pause-level-select {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+#start-level-input {
+  background: var(--bg-kbd);
+  color: var(--color-text);
+  border: 1px solid var(--border-kbd);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 14px;
+  font-family: 'Courier New', Courier, monospace;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
 }
 
 /* ---- Theme toggle switch ---- */
